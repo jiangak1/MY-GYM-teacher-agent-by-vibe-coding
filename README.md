@@ -13,6 +13,9 @@
 - **语音对话** — MIMO-v2.5 TTS 语音合成，faster-whisper 语音识别
 - **iPhone 快捷指令同步** — 通过 Shortcut 将 Apple Health 数据同步到应用
 - **多 AI 提供商** — 支持 Claude、OpenAI、DeepSeek、Gemini、OpenAI 兼容接口
+##界面图
+<img width="1872" height="948" alt="794264d8-069b-408b-8f0a-462cd47a75a5" src="https://github.com/user-attachments/assets/b0162da3-9110-4125-a3a5-ccb6e8e00ede" />
+<img width="1872" height="948" alt="3d627601-db76-404e-9d05-933fc9c4d44b" src="https://github.com/user-attachments/assets/fe9acf96-8f11-4fba-bd15-1ea79c7d2bd1" />
 
 ## 技术栈
 

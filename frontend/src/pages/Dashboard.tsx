@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Footprints, Moon, Heart, TrendingUp, Activity, Zap, Brain,
+  Moon, Heart, TrendingUp, Activity, Zap, Brain,
   Plus, X, Apple, Utensils, Trash2, Weight, Bed, Dumbbell,
 } from 'lucide-react'
 import { Card, StatCard } from '../components/ui/Card'
 import { useHealthStore } from '../stores/healthStore'
-import { cn, formatNumber } from '../lib/utils'
+import { cn } from '../lib/utils'
 import { apiGet, apiPost, apiDelete } from '../api/client'
 import { toast } from 'sonner'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
@@ -363,8 +363,7 @@ export default function Dashboard() {
       </AnimatePresence>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-6 gap-3">
-        <StatCard label="今日步数" value={formatNumber(today?.steps || 0)} unit="步" icon={Footprints} delay={1} />
+      <div className="grid grid-cols-5 gap-3">
         <StatCard label="睡眠" value={today?.sleepDurationMin ? (today.sleepDurationMin / 60).toFixed(1) : '0'} unit="小时" icon={Moon} delay={1} />
         <StatCard label="恢复评分" value={recovery?.score || 50} unit="/100" icon={Heart} delay={1}
           trend={recovery?.recommendation?.slice(0, 8)} />

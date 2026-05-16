@@ -7,3 +7,7 @@ target/
 .cache/
 *.pyc
 __pycache__/
+# Frontend tsc build artifacts
+frontend/src/**/*.js
+frontend/src/**/*.js.map
+*.tsbuildinfo

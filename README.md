@@ -99,6 +99,55 @@ npm run dev
 | `EXERCISEDB_API_KEY` | 训练动作搜索 | https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb |
 | `MIMO_TTS_API_KEY` | 语音合成 | — |
 
+## iPhone 快捷指令同步
+
+通过 iOS 快捷指令将 Apple Health 数据一键同步到应用。
+
+### 前提条件
+
+- iPhone 和电脑在**同一 WiFi** 网络下
+- 获取电脑局域网 IP 地址（Windows: `ipconfig`，Mac: `ifconfig`）
+
+### 创建快捷指令
+
+1. 打开 iPhone **「快捷指令」** App，点击右上角 **+** 新建
+2. 添加 **「获取健康样本」** 操作，依次获取以下数据：
+
+| 数据类型 | 日期范围 | 变量名 |
+|---------|---------|--------|
+| 步数 | 今天 | steps |
+| 步行+跑步距离 | 今天 | distance |
+| 活动能量 | 今天 | calories |
+| 锻炼分钟数 | 今天 | exerciseMin |
+| 睡眠 | 今天 | sleepMin |
+| 心率变异性 | 最近 7 天 | hrv |
+| 心率 | 今天 | heartRate |
+| 体重 | 最近 7 天 | weightKg |
+
+3. 添加 **「词典」** 操作，构造 JSON 数据包
+4. 添加 **「获取 URL 内容」** 操作：
+
+```
+URL:      http://<你的电脑IP>:3001/health/sync
+方法:      POST
+请求头:    Content-Type: application/json
+           x-user-id: default-user
+请求体:    选择上一步的「词典」变量
+```
+
+5. 保存并命名为 **「健康数据同步」**
+
+### 使用
+
+- 点击运行即可将 Apple Health 数据同步到应用
+- 可**添加到主屏幕**，像普通 App 一键同步
+- 可设置**自动化**：每天固定时间自动运行
+
+### 故障排除
+
+- 连接失败 → 检查 WiFi 是否一致、IP 是否正确、防火墙是否拦截 3001 端口
+- 无数据 → 确保 Apple Health 中有对应数据，首次运行需授权
+
 ## License
 
 MIT

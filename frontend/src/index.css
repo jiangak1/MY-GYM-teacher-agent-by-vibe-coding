@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-card-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image:
+      radial-gradient(ellipse at top, hsla(220, 15%, 15%, 0.5), transparent 50%),
+      radial-gradient(ellipse at bottom, hsla(160, 40%, 8%, 0.3), transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(220 15% 18%);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(220 15% 25%);
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-glass backdrop-blur-glass border border-card-border rounded-xl shadow-glass;
+  }
+  .glass-sm {
+    @apply bg-glass backdrop-blur-glass border border-card-border rounded-lg shadow-glass-sm;
+  }
+  .glass-card {
+    @apply glass p-5 transition-all duration-300 hover:shadow-glow;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent to-info bg-clip-text text-transparent;
+  }
+  .stat-value {
+    @apply text-2xl font-semibold text-foreground;
+  }
+  .stat-label {
+    @apply text-sm text-muted-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

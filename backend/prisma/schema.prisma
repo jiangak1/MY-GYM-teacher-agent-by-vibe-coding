@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// User — Core user account
+// ============================================================
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile          UserProfile?
+  dailyHealths     DailyHealth[]
+  workoutLogs      WorkoutLog[]
+  nutritionLogs    NutritionLog[]
+  carbonCyclePlans CarbonCyclePlan[]
+  aiHealthMemories AIHealthMemory[]
+  aiConversations  AIConversation[]
+  providerSettings ProviderSettings?
+}
+
+// ============================================================
+// UserProfile — Comprehensive health profile
+// ============================================================
+model UserProfile {
+  id        String @id @default(uuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id])
+
+  age                    Int
+  gender                 String
+  heightCm               Float
+  currentWeightKg        Float
+  targetWeightKg         Float
+  hasTrainingExperience  Boolean
+  weeklyTrainingDays     Int
+  cardioMinutesPerWeek   Int
+  sleepHoursPerNight     Float
+  dietStyle              String
+  activityLevel          String
+
+  // Computed fields
+  bmi                    Float?
+  bmr                    Float?
+  tdee                   Float?
+  bodyFatPercentage      Float?
+  ffmi                   Float?
+  obesityLevel           String?
+  metabolicLevel         String?
+  trainingExperience     String?
+  fatLossPhase           String?
+
+  onboardingComplete     Boolean @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+// ============================================================
+// DailyHealth — Daily health metrics snapshot
+// ============================================================
+model DailyHealth {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  date      String   // YYYY-MM-DD
+  steps     Int      @default(0)
+  walkingDistanceM    Float @default(0)
+  activeCalories     Float @default(0)
+  exerciseMinutes    Int   @default(0)
+  sleepDurationMin   Int   @default(0)
+  sleepQuality       String @default("fair")
+  hrv                Float @default(0)
+  heartRate          Float @default(0)
+  weightKg           Float @default(0)
+  caloriesConsumed   Float @default(0)
+  proteinG           Float @default(0)
+  carbsG             Float @default(0)
+  fatG               Float @default(0)
+  recoveryScore      Int?
+  notes              String?
+  createdAt          DateTime @default(now())
+
+  @@unique([userId, date])
+}
+
+// ============================================================
+// WorkoutLog — Exercise session records
+// ============================================================
+model WorkoutLog {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  date          String
+  workoutType   String   // strength, cardio, hiit, flexibility, other
+  durationMin   Int
+  caloriesBurned Float
+  exercises     String   // JSON string of ExerciseEntry[]
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+// ============================================================
+// NutritionLog — Food intake records
+// ============================================================
+model NutritionLog {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  date        String
+  mealType    String   // breakfast, lunch, dinner, snack
+  foodName    String
+  servingSizeG Float
+  calories    Float
+  proteinG    Float
+  carbsG      Float
+  fatG        Float
+  createdAt   DateTime @default(now())
+}
+
+// ============================================================
+// CarbonCyclePlan — Carb cycling plan records
+// ============================================================
+model CarbonCyclePlan {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  startDate String
+  endDate   String
+  days      String   // JSON string of CarbonCycleDay[]
+  generatedAt DateTime @default(now())
+  reason    String?
+}
+
+// ============================================================
+// AIHealthMemory — Long-term AI health memory
+// ============================================================
+model AIHealthMemory {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  category  String   // sleep, training, nutrition, recovery, weight, general
+  key       String
+  value     String   // JSON-encoded value
+  confidence Float   @default(1.0)
+  lastUpdated DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@unique([userId, category, key])
+}
+
+// ============================================================
+// AIConversation — Chat message history
+// ============================================================
+model AIConversation {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  role        String   // user, assistant, system, tool
+  content     String
+  toolCalls   String?  // JSON string of ToolCall[]
+  timestamp   DateTime @default(now())
+}
+
+// ============================================================
+// ProviderSettings — API keys and provider config (encrypted)
+// ============================================================
+model ProviderSettings {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  chatProvider    String   @default("claude")
+  chatModel       String   @default("claude-sonnet-4-6")
+  sttProvider     String   @default("faster_whisper")
+  ttsProvider     String   @default("mimo_v2.5")
+  encryptedApiKeys String  @default("{}") // AES-256-GCM encrypted JSON
+  theme           String   @default("dark")
+  language        String   @default("zh-CN")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

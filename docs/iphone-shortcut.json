@@ -1,0 +1,121 @@
+{
+  "shortcut_name": "健康数据同步",
+  "description": "将 Apple Health 数据同步到 AI 私人健康助手",
+  "workflow": [
+    {
+      "step": 1,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "步数",
+        "日期范围": "今天"
+      },
+      "output_variable": "steps"
+    },
+    {
+      "step": 2,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "步行+跑步距离",
+        "日期范围": "今天"
+      },
+      "output_variable": "walking_distance"
+    },
+    {
+      "step": 3,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "活动能量",
+        "日期范围": "今天"
+      },
+      "output_variable": "active_calories"
+    },
+    {
+      "step": 4,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "锻炼分钟数",
+        "日期范围": "今天"
+      },
+      "output_variable": "exercise_minutes"
+    },
+    {
+      "step": 5,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "睡眠",
+        "日期范围": "今天"
+      },
+      "output_variable": "sleep_duration"
+    },
+    {
+      "step": 6,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "心率变异性",
+        "日期范围": "最近7天"
+      },
+      "output_variable": "hrv"
+    },
+    {
+      "step": 7,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "心率",
+        "日期范围": "今天"
+      },
+      "output_variable": "heart_rate"
+    },
+    {
+      "step": 8,
+      "action": "获取健康样本",
+      "parameters": {
+        "数据类型": "体重",
+        "日期范围": "最近7天"
+      },
+      "output_variable": "weight"
+    },
+    {
+      "step": 9,
+      "action": "词典",
+      "parameters": {
+        "键值": {
+          "steps": "{{steps}}",
+          "walking_distance": "{{walking_distance}}",
+          "active_calories": "{{active_calories}}",
+          "exercise_minutes": "{{exercise_minutes}}",
+          "sleep_duration": "{{sleep_duration}}",
+          "hrv": "{{hrv}}",
+          "heart_rate": "{{heart_rate}}",
+          "weight": "{{weight}}",
+          "date": "{{当前日期}}"
+        }
+      }
+    },
+    {
+      "step": 10,
+      "action": "获取URL内容",
+      "parameters": {
+        "URL": "http://<YOUR_COMPUTER_IP>:3001/health/sync",
+        "方法": "POST",
+        "请求头": {
+          "Content-Type": "application/json",
+          "x-user-id": "default-user"
+        },
+        "请求体": "词典"
+      }
+    }
+  ],
+  "setup_instructions": [
+    "1. 打开 iPhone 上的「快捷指令」App",
+    "2. 点击右上角 + 新建快捷指令",
+    "3. 按照 workflow 逐步添加操作",
+    "4. 将 <YOUR_COMPUTER_IP> 替换为你的电脑局域网 IP 地址",
+    "5. 确保 iPhone 和电脑在同一 WiFi 网络下",
+    "6. 保存并命名快捷指令为「健康数据同步」",
+    "7. 可以添加到主屏幕，方便一键同步",
+    "",
+    "获取电脑 IP 地址：",
+    "  Windows: ipconfig",
+    "  Mac/Linux: ifconfig | grep inet"
+  ]
+}
